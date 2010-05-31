@@ -15,6 +15,13 @@ require 'date'
 require 'time'
 require 'chronic'
 
+class Symbol
+  def <=>(with)
+    return nil unless with.is_a? Symbol
+    to_s <=> with.to_s
+  end unless method_defined? :"<=>"
+end
+
 class Date
   def to_date
     self
