@@ -84,7 +84,7 @@ require 'tickle/repeater'
 module Tickle #:nodoc:
   VERSION = "0.1.7"
 
-  def self.debug=(val); @debug = true; end
+  def self.debug=(val); @debug = val; end
 
   def self.dwrite(msg, line_feed=nil)
     (line_feed ? p(">> #{msg}") : puts(">> #{msg}")) if @debug
