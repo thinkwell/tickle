@@ -178,18 +178,18 @@ class TestParsing < Test::Unit::TestCase
     end
 
     assert_raise(Tickle::InvalidDateExpression) do
-      past_date = Date.civil(Date.today.year, Date.today.month, Date.today.day - 1)
+      past_date = Chronic.parse('1 day ago').to_date
       time = Tickle.parse("every other day", {:start => past_date})
     end
 
     assert_raise(Tickle::InvalidDateExpression) do
-      start_date = Date.civil(Date.today.year, Date.today.month, Date.today.day + 10)
-      end_date = Date.civil(Date.today.year, Date.today.month, Date.today.day + 5)
+      start_date = Chronic.parse('10 days from now').to_date
+      end_date = Chronic.parse('5 days from now').to_date
       time = Tickle.parse("every other day", :start => start_date, :until => end_date)
     end
 
     assert_raise(Tickle::InvalidDateExpression) do
-      end_date = Date.civil(Date.today.year, Date.today.month+2, Date.today.day)
+      end_date = Chronic.parse('2 months from now').to_date
       parse_now('every 3 months', {:until => end_date})
     end
   end
