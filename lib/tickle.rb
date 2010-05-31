@@ -84,7 +84,7 @@ require 'tickle/repeater'
 module Tickle #:nodoc:
   VERSION = "0.1.7"
 
-  def self.debug=(val); @debug = val; end
+  def self.debug=(val); @debug = true; end
 
   def self.dwrite(msg, line_feed=nil)
     (line_feed ? p(">> #{msg}") : puts(">> #{msg}")) if @debug
@@ -112,16 +112,16 @@ class Date #:nodoc:
     amount ||= 1
     case attr
     when :day then
-      Date.civil(self.year, self.month, self.day + amount)
+      self + amount
     when :wday then
       amount = Date::ABBR_DAYNAMES.index(amount) if amount.is_a?(String)
       raise Exception, "specified day of week invalid.  Use #{Date::ABBR_DAYNAMES}" unless amount
       diff = (amount > self.wday) ? (amount - self.wday) : (7 - (self.wday - amount))
-      Date.civil(self.year, self.month, self.day + diff)
+      self + diff
     when :week then
-      Date.civil(self.year, self.month, self.day + (7*amount))
+      self + (7*amount)
     when :month then
-      Date.civil(self.year, self.month+amount, self.day)
+      self>>amount
     when :year then
       Date.civil(self.year + amount, self.month, self.day)
     else
@@ -137,22 +137,23 @@ class Time #:nodoc:
     amount ||= 1
     case attr
     when :sec then
-      Time.local(self.year, self.month, self.day, self.hour, self.min, self.sec + amount)
+      self + amount
     when :min then
-      Time.local(self.year, self.month, self.day, self.hour, self.min + amount, self.sec)
+      self + (amount * 60)
     when :hour then
-      Time.local(self.year, self.month, self.day, self.hour + amount, self.min, self.sec)
+      self + (amount * 60 * 60)
     when :day then
-      Time.local(self.year, self.month, self.day + amount, self.hour, self.min, self.sec)
+      self + (amount * 60 * 60 * 24)
     when :wday then
       amount = Time::RFC2822_DAY_NAME.index(amount) if amount.is_a?(String)
       raise Exception, "specified day of week invalid.  Use #{Time::RFC2822_DAY_NAME}" unless amount
       diff = (amount > self.wday) ? (amount - self.wday) : (7 - (self.wday - amount))
-      Time.local(self.year, self.month, self.day + diff, self.hour, self.min, self.sec)
+      self.bump(:day, diff)
     when :week then
-      Time.local(self.year, self.month, self.day + (amount * 7), self.hour, self.min, self.sec)
+      self + (amount * 60 * 60 * 24 * 7)
     when :month then
-      Time.local(self.year, self.month + amount, self.day, self.hour, self.min, self.sec)
+      d = self.to_date >> amount
+      Time.local(d.year, d.month, d.day, self.hour, self.min, self.sec)
     when :year then
       Time.local(self.year + amount, self.month, self.day, self.hour, self.min, self.sec)
     else

@@ -94,13 +94,13 @@ class TestParsing < Test::Unit::TestCase
 
     assert_tickle_match(@date.bump(:wday, 'Mon'), @date.bump(:wday, 'Mon'), nil, 'month', 'starting Monday repeat every month')
 
-    year = @date >= Date.new(@date.year, 5, 13) ? @date.bump(:year,1) : @date.year
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'week', 'starting May 13th repeat every week')
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'other day', 'starting May 13th repeat every other day')
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'other day', 'every other day starts May 13th')
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'other day', 'every other day starts May 13')
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'other day', 'every other day starting May 13th')
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'other day', 'every other day starting May 13')
+    year = @date >= Date.new(@date.year, 6, 13) ? @date.bump(:year,1) : @date.year
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'week', 'starting June 13th repeat every week')
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'other day', 'starting June 13th repeat every other day')
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'other day', 'every other day starts June 13th')
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'other day', 'every other day starts June 13')
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'other day', 'every other day starting June 13th')
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'other day', 'every other day starting June 13')
 
     assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), nil, 'week', 'every week starts this wednesday')
     assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), nil, 'week', 'every week starting this wednesday')
@@ -109,9 +109,9 @@ class TestParsing < Test::Unit::TestCase
     assert_tickle_match(Date.new(2021, 05, 01), Date.new(2021, 05, 01), nil, 'other day',  "every other day starting May 1 #{start.bump(:year, 1).year}")
     assert_tickle_match(@date.bump(:wday, 'Sun'), @date.bump(:wday, 'Sun'),  nil, 'other week',  'every other week starting this Sunday')
 
-    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 05, 13), 'week', 'every week starting this wednesday until May 13th')
-    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 05, 13), 'week', 'every week starting this wednesday ends May 13th')
-    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 05, 13), 'week', 'every week starting this wednesday ending May 13th')
+    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 06, 13), 'week', 'every week starting this wednesday until June 13th')
+    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 06, 13), 'week', 'every week starting this wednesday ends June 13th')
+    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 06, 13), 'week', 'every week starting this wednesday ending June 13th')
   end
 
   def test_tickle_args

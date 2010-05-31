@@ -241,8 +241,11 @@ module Tickle  #:nodoc:
         number = token_of_type(:number)
         ordinal = token_of_type(:ordinal)
         combined_original = "#{number.original} #{ordinal.original}"
-        combined_word = (number.start.to_s[0] + ordinal.word)
-        combined_value = (number.start.to_s[0] + ordinal.start.to_s)
+        Tickle.dwrite "number.start = #{number.start}"
+        Tickle.dwrite "number.start.to_s = #{number.start.to_s}"
+        Tickle.dwrite "number.start.to_s[0] = #{number.start.to_s[0]}"
+        combined_word = ([number.start.to_s.chars.first, ordinal.word].join(""))
+        combined_value = ([number.start.to_s.chars.first, ordinal.start.to_s].join(""))
         new_number_token = Token.new(combined_original, combined_word, :ordinal, combined_value, 365)
         @tokens.reject! {|token| (token.type == :number || token.type == :ordinal)}
         @tokens << new_number_token

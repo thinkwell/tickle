@@ -120,7 +120,7 @@ module Tickle #:nodoc:
     # needed to handle the unique situation where a number or ordinal plus optional month or month name is passed that is EQUAL to the start date since Chronic returns that day.
     def handle_same_day_chronic_issue(year, month, day)
       Tickle.dwrite("year (#{year}), month (#{month}), day (#{day})")
-      arg_date = (Date.new(year.to_i, month.to_i, day.to_i) == @start.to_date) ? Time.local(year, month+1, day) : Time.local(year, month, day)
+      arg_date = (Date.new(year.to_i, month.to_i, day.to_i) == @start.to_date) ? (Date.new(year.to_i, month.to_i, day.to_i) >> 1).to_time : Time.local(year, month, day)
       return arg_date
     end
 
