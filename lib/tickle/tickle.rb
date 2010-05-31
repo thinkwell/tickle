@@ -134,7 +134,7 @@ module Tickle  #:nodoc:
           raise(InvalidDateExpression,"the starting date expression \"#{starting}\" could not be interpretted")
         end
       else
-        @start = options[:start].to_time rescue nil
+        @start = options[:start].to_time #rescue nil
       end
 
       if ending

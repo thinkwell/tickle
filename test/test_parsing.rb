@@ -1,5 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/helper')
 require 'time'
+require 'date'
 require 'test/unit'
 
 class TestParsing < Test::Unit::TestCase

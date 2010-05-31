@@ -9,9 +9,62 @@
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))     # For use/testing when no gem is installed
 
+
+
 require 'date'
 require 'time'
 require 'chronic'
+
+class Date
+  def to_date
+    self
+  end unless method_defined?(:to_date)
+  
+  def to_time(form = :local)
+    Time.send("#{form}_time", year, month, day)
+  end
+end
+
+class Time
+  class << self
+    # Overriding case equality method so that it returns true for ActiveSupport::TimeWithZone instances
+    def ===(other)
+      other.is_a?(::Time)
+    end
+  
+    # Return the number of days in the given month.
+    # If no year is specified, it will use the current year.
+    def days_in_month(month, year = now.year)
+      return 29 if month == 2 && ::Date.gregorian_leap?(year)
+      COMMON_YEAR_DAYS_IN_MONTH[month]
+    end
+  
+    # Returns a new Time if requested year can be accommodated by Ruby's Time class
+    # (i.e., if year is within either 1970..2038 or 1902..2038, depending on system architecture);
+    # otherwise returns a DateTime
+    def time_with_datetime_fallback(utc_or_local, year, month=1, day=1, hour=0, min=0, sec=0, usec=0)
+      time = ::Time.send(utc_or_local, year, month, day, hour, min, sec, usec)
+      # This check is needed because Time.utc(y) returns a time object in the 2000s for 0 <= y <= 138.
+      time.year == year ? time : ::DateTime.civil_from_format(utc_or_local, year, month, day, hour, min, sec)
+    rescue
+      ::DateTime.civil_from_format(utc_or_local, year, month, day, hour, min, sec)
+    end
+  
+    # Wraps class method +time_with_datetime_fallback+ with +utc_or_local+ set to <tt>:utc</tt>.
+    def utc_time(*args)
+      time_with_datetime_fallback(:utc, *args)
+    end
+  
+    # Wraps class method +time_with_datetime_fallback+ with +utc_or_local+ set to <tt>:local</tt>.
+    def local_time(*args)
+      time_with_datetime_fallback(:local, *args)
+    end
+  end
+  
+  def to_date
+     Date.new(self.year, self.month, self.day)
+   end unless method_defined?(:to_date)
+end
 
 require 'tickle/tickle'
 require 'tickle/handler'
@@ -64,6 +117,8 @@ class Date #:nodoc:
             raise Exception, "type \"#{attr}\" not supported."
     end
   end
+  
+  
 end
 
 class Time #:nodoc:
@@ -94,6 +149,12 @@ class Time #:nodoc:
     end
   end
 end
+
+#class NilClass
+#  def to_date
+#    return nil
+#  end unless method_defined?(:to_date)
+#end
 
 class String #:nodoc:
   # returns true if the sending string is a text or numeric ordinal (e.g. first or 1st)
