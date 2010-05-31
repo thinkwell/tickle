@@ -63,7 +63,11 @@ class Time
   
   def to_date
      Date.new(self.year, self.month, self.day)
-   end unless method_defined?(:to_date)
+  end unless method_defined?(:to_date)
+   
+  def to_time
+     self
+  end
 end
 
 require 'tickle/tickle'
