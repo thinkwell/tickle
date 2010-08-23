@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
      "SCENARIOS.rdoc",
      "VERSION",
      "git-flow-version",
+     "lapluviosilla-tickle.gemspec",
      "lib/numerizer/numerizer.rb",
      "lib/tickle.rb",
      "lib/tickle/handler.rb",
