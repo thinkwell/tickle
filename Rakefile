@@ -4,11 +4,11 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "tickle"
+    gem.name = "lapluviosilla-tickle"
     gem.summary = 'natural language parser for recurring events'
     gem.description = 'Tickle is a date/time helper gem to help parse natural language into a recurring pattern.  Tickle is designed to be a compliment of Chronic and can interpret things such as "every 2 days, every Sunday, Sundays, Weekly, etc.'
     gem.email = "jlippiner@noctivity.com"
-    gem.homepage = "http://github.com/noctivityinc/tickle"
+    gem.homepage = "http://github.com/lapluviosilla/tickle"
     gem.authors = ["Joshua Lippiner"]
     gem.add_dependency('chronic', '>= 0.2.3')
     gem.add_development_dependency "shoulda", ">= 2.10.3"
