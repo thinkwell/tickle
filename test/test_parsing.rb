@@ -1,5 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/helper')
 require 'time'
+require 'date'
 require 'test/unit'
 
 class TestParsing < Test::Unit::TestCase
@@ -93,13 +94,13 @@ class TestParsing < Test::Unit::TestCase
 
     assert_tickle_match(@date.bump(:wday, 'Mon'), @date.bump(:wday, 'Mon'), nil, 'month', 'starting Monday repeat every month')
 
-    year = @date >= Date.new(@date.year, 5, 13) ? @date.bump(:year,1) : @date.year
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'week', 'starting May 13th repeat every week')
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'other day', 'starting May 13th repeat every other day')
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'other day', 'every other day starts May 13th')
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'other day', 'every other day starts May 13')
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'other day', 'every other day starting May 13th')
-    assert_tickle_match(Date.new(year, 05, 13), Date.new(year, 05, 13), nil, 'other day', 'every other day starting May 13')
+    year = @date >= Date.new(@date.year, 6, 13) ? @date.bump(:year,1) : @date.year
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'week', 'starting June 13th repeat every week')
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'other day', 'starting June 13th repeat every other day')
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'other day', 'every other day starts June 13th')
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'other day', 'every other day starts June 13')
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'other day', 'every other day starting June 13th')
+    assert_tickle_match(Date.new(year, 06, 13), Date.new(year, 06, 13), nil, 'other day', 'every other day starting June 13')
 
     assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), nil, 'week', 'every week starts this wednesday')
     assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), nil, 'week', 'every week starting this wednesday')
@@ -108,9 +109,9 @@ class TestParsing < Test::Unit::TestCase
     assert_tickle_match(Date.new(2021, 05, 01), Date.new(2021, 05, 01), nil, 'other day',  "every other day starting May 1 #{start.bump(:year, 1).year}")
     assert_tickle_match(@date.bump(:wday, 'Sun'), @date.bump(:wday, 'Sun'),  nil, 'other week',  'every other week starting this Sunday')
 
-    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 05, 13), 'week', 'every week starting this wednesday until May 13th')
-    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 05, 13), 'week', 'every week starting this wednesday ends May 13th')
-    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 05, 13), 'week', 'every week starting this wednesday ending May 13th')
+    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 06, 13), 'week', 'every week starting this wednesday until June 13th')
+    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 06, 13), 'week', 'every week starting this wednesday ends June 13th')
+    assert_tickle_match(@date.bump(:wday, 'Wed'), @date.bump(:wday, 'Wed'), Date.new(year, 06, 13), 'week', 'every week starting this wednesday ending June 13th')
   end
 
   def test_tickle_args
@@ -177,18 +178,18 @@ class TestParsing < Test::Unit::TestCase
     end
 
     assert_raise(Tickle::InvalidDateExpression) do
-      past_date = Date.civil(Date.today.year, Date.today.month, Date.today.day - 1)
+      past_date = Chronic.parse('1 day ago').to_date
       time = Tickle.parse("every other day", {:start => past_date})
     end
 
     assert_raise(Tickle::InvalidDateExpression) do
-      start_date = Date.civil(Date.today.year, Date.today.month, Date.today.day + 10)
-      end_date = Date.civil(Date.today.year, Date.today.month, Date.today.day + 5)
+      start_date = Chronic.parse('10 days from now').to_date
+      end_date = Chronic.parse('5 days from now').to_date
       time = Tickle.parse("every other day", :start => start_date, :until => end_date)
     end
 
     assert_raise(Tickle::InvalidDateExpression) do
-      end_date = Date.civil(Date.today.year, Date.today.month+2, Date.today.day)
+      end_date = Chronic.parse('2 months from now').to_date
       parse_now('every 3 months', {:until => end_date})
     end
   end
