@@ -56,7 +56,7 @@ module Tickle  #:nodoc:
       Tickle.dwrite("start: #{@start}, until: #{@until}, now: #{options[:now].to_date}")
 
       # => ** this is mostly for testing. Bump by 1 day if today (or in the past for testing)
-      raise(InvalidDateExpression, "the start date (#{@start.to_date}) cannot occur in the past for a future event") if @start && @start.to_date < Date.today
+      raise(InvalidDateExpression, "the start date (#{@start.to_date}) cannot occur in the past for a future event") if @start && @start.to_date < options[:now].to_date
       raise(InvalidDateExpression, "the start date (#{@start.to_date}) cannot occur after the end date") if @until && @start.to_date > @until.to_date
 
       # no need to guess at expression if the start_date is in the future
