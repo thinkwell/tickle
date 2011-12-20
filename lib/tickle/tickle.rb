@@ -195,7 +195,7 @@ module Tickle  #:nodoc:
     # ordinals (third => 3rd)
     def normalize(text) #:nodoc:
       normalized_text = text.to_s.downcase
-      normalized_text = Numerizer.numerize(normalized_text)
+      normalized_text = Chronic::Numerizer.numerize(normalized_text)
       normalized_text.gsub!(/['"\.]/, '')
       normalized_text.gsub!(/([\/\-\,\@])/) { ' ' + $1 + ' ' }
       normalized_text
