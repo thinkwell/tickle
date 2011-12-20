@@ -3,7 +3,7 @@
 # .rvmrc file for tdt application
 
 if [[ "Darwin" = "$(uname)" ]] ; then
-  rvm ruby-1.9.1@tickle --symlink textmate
+  rvm ruby-1.9.2@tickle --symlink textmate
 else
-  rvm ruby-1.9.1@tickle
+  rvm ruby-1.9.2@tickle
 fi
